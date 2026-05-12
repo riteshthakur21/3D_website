@@ -32,5 +32,6 @@ Thumbs.db
 # misc
 *.pem
 .vercel
+.upload/
 
 GEMINI.md
