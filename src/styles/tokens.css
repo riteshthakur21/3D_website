@@ -1,0 +1,21 @@
+:root {
+  --bg: #0A0A0A;
+  --surface: #121212;
+  --surface-2: #1E1E1E;
+  --text: #F5F5F5;
+  --muted: #A0A0A0;
+  --gold: #D01919;
+  --gold-dim: #8B0000;
+  --accent-blue: #1565C0;
+}
+
+[data-theme="light"] {
+  --bg: #0A0A0A;
+  --surface: #121212;
+  --surface-2: #1E1E1E;
+  --text: #F5F5F5;
+  --muted: #A0A0A0;
+  --gold: #D01919;
+  --gold-dim: #8B0000;
+  --accent-blue: #1565C0;
+}
