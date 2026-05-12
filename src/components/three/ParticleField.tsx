@@ -3,11 +3,15 @@
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import { BufferAttribute, BufferGeometry, Points } from "three";
+import { THEME_COLORS } from "@/lib/constants";
 import { useSceneStore } from "@/store/scene-store";
+import { useUiStore } from "@/store/ui-store";
 
 export function ParticleField() {
   const quality = useSceneStore((s) => s.quality);
   const paused = useSceneStore((s) => s.paused);
+  const theme = useUiStore((s) => s.mode);
+  const colors = THEME_COLORS[theme];
   const pointsRef = useRef<Points>(null);
   const count = quality === "high" ? 2200 : 900;
 
@@ -69,7 +73,7 @@ export function ParticleField() {
 
   return (
     <points ref={pointsRef} geometry={geometry}>
-      <pointsMaterial size={0.025} color="#D01919" transparent opacity={0.5} sizeAttenuation />
+      <pointsMaterial size={0.025} color={colors.primary} transparent opacity={0.5} sizeAttenuation />
     </points>
   );
 }

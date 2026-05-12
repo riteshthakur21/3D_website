@@ -3,12 +3,16 @@
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { Mesh } from "three";
+import { THEME_COLORS } from "@/lib/constants";
 import { useSceneStore } from "@/store/scene-store";
+import { useUiStore } from "@/store/ui-store";
 
 export function OrbitRings() {
   const ringOne = useRef<Mesh>(null);
   const ringTwo = useRef<Mesh>(null);
   const paused = useSceneStore((s) => s.paused);
+  const theme = useUiStore((s) => s.mode);
+  const colors = THEME_COLORS[theme];
 
   useFrame((state) => {
     if (paused) return;
@@ -24,11 +28,11 @@ export function OrbitRings() {
     <>
       <mesh ref={ringOne} rotation={[Math.PI / 2.5, 0, 0]}>
         <torusGeometry args={[2.2, 0.004, 2, 200]} />
-        <meshBasicMaterial color="#D01919" transparent opacity={0.2} />
+        <meshBasicMaterial color={colors.primary} transparent opacity={0.2} />
       </mesh>
       <mesh ref={ringTwo} rotation={[Math.PI / 1.2, Math.PI / 4, 0]}>
         <torusGeometry args={[2.2, 0.004, 2, 200]} />
-        <meshBasicMaterial color="#D01919" transparent opacity={0.2} />
+        <meshBasicMaterial color={colors.primary} transparent opacity={0.2} />
       </mesh>
     </>
   );

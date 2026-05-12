@@ -3,13 +3,16 @@
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Group, IcosahedronGeometry, Mesh, MeshBasicMaterial, MeshStandardMaterial, SphereGeometry, TorusGeometry } from "three";
-import type { SceneMode } from "@/lib/constants";
+import { THEME_COLORS, type SceneMode } from "@/lib/constants";
 import { useSceneStore } from "@/store/scene-store";
+import { useUiStore } from "@/store/ui-store";
 
 type GeometryMap = Record<SceneMode, IcosahedronGeometry | TorusGeometry | SphereGeometry>;
 
 export function MorphMesh() {
   const mode = useSceneStore((s) => s.mode);
+  const theme = useUiStore((s) => s.mode);
+  const colors = THEME_COLORS[theme];
   const paused = useSceneStore((s) => s.paused);
   const quality = useSceneStore((s) => s.quality);
   const group = useRef<Group>(null);
@@ -76,12 +79,12 @@ export function MorphMesh() {
       {geometries[previousMode] && (
         <>
           <mesh geometry={geometries[previousMode]}>
-            <meshBasicMaterial ref={wirePrev} color="#D01919" wireframe transparent opacity={0} />
+            <meshBasicMaterial ref={wirePrev} color={colors.primary} wireframe transparent opacity={0} />
           </mesh>
           <mesh geometry={geometries[previousMode]}>
             <meshStandardMaterial
               ref={solidPrev}
-              color="#8B0000"
+              color={colors.secondary}
               metalness={0.9}
               roughness={0.15}
               transparent
@@ -96,12 +99,12 @@ export function MorphMesh() {
       {geometries[currentMode] && (
         <>
           <mesh geometry={geometries[currentMode]}>
-            <meshBasicMaterial ref={wirePrimary} color="#D01919" wireframe transparent opacity={0.15} />
+            <meshBasicMaterial ref={wirePrimary} color={colors.primary} wireframe transparent opacity={0.15} />
           </mesh>
           <mesh geometry={geometries[currentMode]}>
             <meshStandardMaterial
               ref={solidPrimary}
-              color="#8B0000"
+              color={colors.secondary}
               metalness={0.9}
               roughness={0.15}
               transparent
@@ -115,7 +118,7 @@ export function MorphMesh() {
 
       <mesh>
         <sphereGeometry args={[0.8, quality === "high" ? 32 : 16, quality === "high" ? 32 : 16]} />
-        <meshBasicMaterial ref={glowMat} color="#D01919" transparent opacity={0.04} />
+        <meshBasicMaterial ref={glowMat} color={colors.glow} transparent opacity={0.04} />
       </mesh>
     </group>
   );

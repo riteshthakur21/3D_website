@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { type SceneMode } from '@/lib/constants'
 
 type Quality = "low" | "high"
 
@@ -18,8 +19,8 @@ interface SceneStore {
   setActiveSection: (section: string) => void
   isLoaded: boolean
   setIsLoaded: (loaded: boolean) => void
-  mode: string
-  setMode: (mode: string) => void
+  mode: SceneMode
+  setMode: (mode: SceneMode) => void
 }
 
 export const useSceneStore = create<SceneStore>((set) => ({
@@ -38,6 +39,6 @@ export const useSceneStore = create<SceneStore>((set) => ({
   setActiveSection: (section) => set({ activeSection: section }),
   isLoaded: false,
   setIsLoaded: (loaded) => set({ isLoaded: loaded }),
-  mode: "default",
+  mode: "icosahedron",
   setMode: (mode) => set({ mode }),
 }))

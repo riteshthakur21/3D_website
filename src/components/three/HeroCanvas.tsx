@@ -7,10 +7,12 @@ import { MorphMesh } from "@/components/three/MorphMesh";
 import { OrbitRings } from "@/components/three/OrbitRings";
 import { ParticleField } from "@/components/three/ParticleField";
 import { SceneLights } from "@/components/three/SceneLights";
+import { THEME_COLORS } from "@/lib/constants";
 import { useAdaptiveQuality } from "@/hooks/useAdaptiveQuality";
 import { useMouseLerp } from "@/hooks/useMouseLerp";
 import { useVisibilityPause } from "@/hooks/useVisibilityPause";
 import { useSceneStore } from "@/store/scene-store";
+import { useUiStore } from "@/store/ui-store";
 
 export function HeroCanvas() {
   useMouseLerp();
@@ -18,6 +20,8 @@ export function HeroCanvas() {
   useAdaptiveQuality();
   const quality = useSceneStore((s) => s.quality);
   const paused = useSceneStore((s) => s.paused);
+  const theme = useUiStore((s) => s.mode);
+  const colors = THEME_COLORS[theme];
 
   return (
     <div className="fixed inset-0 z-0">
@@ -27,7 +31,7 @@ export function HeroCanvas() {
         camera={{ position: [0, 0, 5], fov: 60, near: 0.1, far: 1000 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
-        <color attach="background" args={["#0A0A0A"]} />
+        <color attach="background" args={[colors.bg]} />
         <Suspense fallback={null}>
           <SceneLights />
           <CameraRig>

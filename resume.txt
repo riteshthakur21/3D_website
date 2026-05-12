@@ -1,1 +1,1 @@
-gemini --resume 1aa1e1d8-51ac-4335-a646-5616153d3a35
+--resume 1aa1e1d8-51ac-4335-a646-5616153d3a35
