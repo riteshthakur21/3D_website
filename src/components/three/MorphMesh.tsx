@@ -16,8 +16,10 @@ export function MorphMesh() {
   const paused = useSceneStore((s) => s.paused);
   const quality = useSceneStore((s) => s.quality);
   const group = useRef<Group>(null);
+  
   const [currentMode, setCurrentMode] = useState<SceneMode>("icosahedron");
   const [previousMode, setPreviousMode] = useState<SceneMode>("icosahedron");
+  const [transitioning, setTransitioning] = useState(false);
   const blend = useRef(1);
 
   const geometries = useMemo<GeometryMap>(() => {
@@ -42,6 +44,7 @@ export function MorphMesh() {
     setPreviousMode(currentMode);
     setCurrentMode(mode);
     blend.current = 0;
+    setTransitioning(true);
   }, [mode, currentMode]);
 
   useEffect(
@@ -62,7 +65,12 @@ export function MorphMesh() {
     const pulse = 0.5 + 0.5 * Math.sin(t * 1.5);
     if (glowMat.current) glowMat.current.opacity = 0.02 + 0.05 * pulse;
 
-    blend.current = Math.min(1, blend.current + 0.045);
+    if (blend.current < 1) {
+      blend.current = Math.min(1, blend.current + 0.045);
+    } else if (transitioning) {
+      setTransitioning(false);
+    }
+
     const currentOpacity = blend.current;
     const prevOpacity = 1 - blend.current;
 
@@ -76,34 +84,14 @@ export function MorphMesh() {
 
   return (
     <group ref={group}>
-      {geometries[previousMode] && (
-        <>
+      {transitioning && geometries[previousMode] && (
+        <group key="prev-shape">
           <mesh geometry={geometries[previousMode]}>
-            <meshBasicMaterial ref={wirePrev} color={colors.primary} wireframe transparent opacity={0} />
+            <meshBasicMaterial ref={wirePrev} color={colors.primary} wireframe transparent opacity={0.15} />
           </mesh>
           <mesh geometry={geometries[previousMode]}>
             <meshStandardMaterial
               ref={solidPrev}
-              color={colors.secondary}
-              metalness={0.9}
-              roughness={0.15}
-              transparent
-              opacity={0}
-              emissive="#0A0A0A"
-              emissiveIntensity={0.3}
-            />
-          </mesh>
-        </>
-      )}
-
-      {geometries[currentMode] && (
-        <>
-          <mesh geometry={geometries[currentMode]}>
-            <meshBasicMaterial ref={wirePrimary} color={colors.primary} wireframe transparent opacity={0.15} />
-          </mesh>
-          <mesh geometry={geometries[currentMode]}>
-            <meshStandardMaterial
-              ref={solidPrimary}
               color={colors.secondary}
               metalness={0.9}
               roughness={0.15}
@@ -113,8 +101,32 @@ export function MorphMesh() {
               emissiveIntensity={0.3}
             />
           </mesh>
-        </>
+        </group>
       )}
+
+      <group key="curr-shape">
+        <mesh geometry={geometries[currentMode]}>
+          <meshBasicMaterial 
+            ref={wirePrimary} 
+            color={colors.primary} 
+            wireframe 
+            transparent 
+            opacity={transitioning ? 0 : 0.15} 
+          />
+        </mesh>
+        <mesh geometry={geometries[currentMode]}>
+          <meshStandardMaterial
+            ref={solidPrimary}
+            color={colors.secondary}
+            metalness={0.9}
+            roughness={0.15}
+            transparent
+            opacity={transitioning ? 0 : 0.85}
+            emissive="#0A0A0A"
+            emissiveIntensity={0.3}
+          />
+        </mesh>
+      </group>
 
       <mesh>
         <sphereGeometry args={[0.8, quality === "high" ? 32 : 16, quality === "high" ? 32 : 16]} />
