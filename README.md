@@ -15,7 +15,7 @@
       <p align="center"><b>Spiderman Theme</b><br/>Icosahedron Geometry</p>
     </td>
     <td>
-      <img src="public/preview4.png" width="400"/>
+      <img src="public/preview2.png" width="400"/>
       <p align="center"><b>Cyberpunk Theme</b><br/>Torus Geometry</p>
     </td>
   </tr>
