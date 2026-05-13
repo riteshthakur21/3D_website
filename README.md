@@ -25,7 +25,7 @@
       <p align="center"><b>Matrix Theme</b><br/>Sphere Geometry</p>
     </td>
     <td>
-      <img src="public/preview2.png" width="400"/>
+      <img src="public/preview4.png" width="400"/>
       <p align="center"><b>Portfolio Overview</b><br/>Project Section Display</p>
     </td>
   </tr>
